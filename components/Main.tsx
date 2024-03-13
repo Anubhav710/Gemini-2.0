@@ -86,6 +86,8 @@ const Main = () => {
               />
             </motion.div>
             <h1>{resp}</h1>
+            <h1>{resp}</h1>
+            <h1>{resp}</h1>
           </div>
         )}
         <div className="absolute  bottom-6 w-full ">
