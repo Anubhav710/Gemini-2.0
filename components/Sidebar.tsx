@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   menu_icon,
@@ -8,6 +9,7 @@ import {
   setting_icon,
 } from "@/public/assets";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const Sidebar = () => {
   return (
@@ -32,7 +34,7 @@ const Sidebar = () => {
         <div className="px-3">
           <h5 className="font-semibold">Recent</h5>
           <div className="flex space-x-1">
-            <div className="w-6 h-6">
+            <motion.div className="w-6 h-6">
               <Image
                 src={message_icon}
                 alt="message"
@@ -40,7 +42,7 @@ const Sidebar = () => {
                 width={22}
                 className="w-full h-full object-cover"
               />
-            </div>
+            </motion.div>
             <p className="whitespace-nowrap">Hello Gemini</p>
           </div>
         </div>

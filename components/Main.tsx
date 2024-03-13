@@ -1,8 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import Cards from "./Cards";
-import { code_icon, gallery_icon, send_icon } from "@/public/assets";
+import {
+  code_icon,
+  gallery_icon,
+  send_icon,
+  gemini_icon,
+} from "@/public/assets";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const data = [
   {
@@ -30,10 +36,13 @@ const Main = () => {
 
   const handleSubmit = async () => {
     setShow(false);
-    let response = await fetch("http://localhost:3000/api/gemini", {
-      method: "Post",
-      body: JSON.stringify({ prompt }),
-    });
+    let response = await fetch(
+      "https://gemini-2-0-smoky.vercel.app/api/gemini",
+      {
+        method: "Post",
+        body: JSON.stringify({ prompt }),
+      }
+    );
     let data = await response.json();
     console.log(data);
     setResp(data);
@@ -59,7 +68,23 @@ const Main = () => {
             </div>
           </div>
         ) : (
-          <div>
+          <div className="flex space-x-2 items-center ">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 1,
+                ease: "linear",
+                repeat: Infinity,
+              }}
+            >
+              <Image
+                src={gemini_icon}
+                alt="geini-icon"
+                width={34}
+                height={24}
+                className=""
+              />
+            </motion.div>
             <h1>{resp}</h1>
           </div>
         )}

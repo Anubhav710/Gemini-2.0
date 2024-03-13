@@ -61,5 +61,5 @@ export async function POST(req: Request) {
 }
 
 export async function GET(req: Request) {
-  return NextResponse.json({ message: "hello Anubhav" });
+  return NextResponse.json("hello Anubhav");
 }
