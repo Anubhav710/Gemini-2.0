@@ -1,14 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cards from "./Cards";
-import {
-  code_icon,
-  gallery_icon,
-  send_icon,
-  gemini_image,
-} from "@/public/assets";
+import { gallery_icon, send_icon, gemini_image } from "@/public/assets";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import {
+  motion,
+  useAnimate,
+  useAnimation,
+  useMotionValue,
+} from "framer-motion";
 
 const data = [
   {
@@ -33,11 +33,13 @@ const Main = () => {
   const [prompt, setPropmt] = useState("");
   const [resp, setResp] = useState("");
   const [show, setShow] = useState(true);
-  const [loading, setLoading] = useState(false);
+
+  const [state, setState] = useState("initial"); // Initial state
+  const animate = useAnimation();
 
   const handleSubmit = async () => {
     setShow(false);
-    setLoading(true); // Set loading to true before the fetch
+    setState("loading");
 
     try {
       let response = await fetch("/api/gemini", {
@@ -51,15 +53,26 @@ const Main = () => {
       }
 
       let data = await response.json(); // Try parsing the response as JSON
-      console.log(data);
+
       setResp(data);
+      setState("response"); // Set response state after receiving data
     } catch (error) {
       console.error("Error fetching or parsing response:", error);
       // Handle errors appropriately (e.g., display an error message to the user)
     } finally {
-      setLoading(false); // Set loading to false after the fetch (even on errors)
     }
   };
+
+  useEffect(() => {
+    if (state === "loading") {
+      animate.start(
+        { rotate: 360 },
+        { repeat: Infinity, ease: "linear", duration: 1.5 }
+      );
+    } else {
+      animate.stop(); // Stop animation on other states
+    }
+  }, [state, animate]);
 
   return (
     <div className="w-full max-w-screen-md relative  mx-auto h-[90.5vh]   pt-20 pb-10 ">
@@ -83,12 +96,8 @@ const Main = () => {
         ) : (
           <div className="flex space-x-2 items-center ">
             <motion.div
-              animate={loading && { rotate: 360 }}
-              transition={{
-                duration: 1,
-                ease: "linear",
-                repeat: Infinity,
-              }}
+              animate={animate}
+              transition={{ repeat: Infinity, ease: "linear", duration: 1.5 }}
             >
               <Image
                 src={gemini_image}
