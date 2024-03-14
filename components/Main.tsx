@@ -5,7 +5,7 @@ import {
   code_icon,
   gallery_icon,
   send_icon,
-  gemini_icon,
+  gemini_image,
 } from "@/public/assets";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -33,19 +33,32 @@ const Main = () => {
   const [prompt, setPropmt] = useState("");
   const [resp, setResp] = useState("");
   const [show, setShow] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     setShow(false);
-    let response = await fetch(
-      "https://gemini-2-0-smoky.vercel.app/api/gemini",
-      {
-        method: "Post",
+    setLoading(true); // Set loading to true before the fetch
+
+    try {
+      let response = await fetch("/api/gemini", {
+        method: "POST",
         body: JSON.stringify({ prompt }),
+      });
+
+      if (!response.ok) {
+        // Check for HTTP errors
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    );
-    let data = await response.json();
-    console.log(data);
-    setResp(data);
+
+      let data = await response.json(); // Try parsing the response as JSON
+      console.log(data);
+      setResp(data);
+    } catch (error) {
+      console.error("Error fetching or parsing response:", error);
+      // Handle errors appropriately (e.g., display an error message to the user)
+    } finally {
+      setLoading(false); // Set loading to false after the fetch (even on errors)
+    }
   };
 
   return (
@@ -70,7 +83,7 @@ const Main = () => {
         ) : (
           <div className="flex space-x-2 items-center ">
             <motion.div
-              animate={{ rotate: 360 }}
+              animate={loading && { rotate: 360 }}
               transition={{
                 duration: 1,
                 ease: "linear",
@@ -78,15 +91,13 @@ const Main = () => {
               }}
             >
               <Image
-                src={gemini_icon}
+                src={gemini_image}
                 alt="geini-icon"
                 width={34}
                 height={24}
                 className=""
               />
             </motion.div>
-            <h1>{resp}</h1>
-            <h1>{resp}</h1>
             <h1>{resp}</h1>
           </div>
         )}
