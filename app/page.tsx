@@ -1,17 +1,20 @@
+import Header from "@/components/Header";
 import Main from "@/components/Main";
-import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+import MessageContextProvider from "@/context/MessageContextProvider";
 
-import Image from "next/image";
+import React from "react";
 
-export default function Home() {
+const page = () => {
   return (
-    <main className="flex">
-      <Sidebar />
-      <div className="w-full">
-        <Navbar />
+    <div className="">
+      {/* sidebar  */}
+      <MessageContextProvider>
+        <Header />
         <Main />
-      </div>
-    </main>
+      </MessageContextProvider>
+    </div>
   );
-}
+};
+
+export default page;

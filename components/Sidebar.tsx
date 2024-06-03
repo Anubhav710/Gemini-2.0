@@ -1,5 +1,9 @@
 "use client";
-import React from "react";
+import React, { useContext, useState } from "react";
+import { BiHelpCircle, BiHistory } from "react-icons/bi";
+import { CiSettings } from "react-icons/ci";
+import { BiMessage } from "react-icons/bi";
+import { IoIosAdd } from "react-icons/io";
 import {
   menu_icon,
   plus_icon,
@@ -10,86 +14,65 @@ import {
 } from "@/public/assets";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { MotionDiv } from "@/utils/motion";
+import MessageContext, { useMessageContext } from "@/context/MessageContext";
 
-const Sidebar = () => {
+const Sidebar = ({ open }: any) => {
+  let data = useMessageContext();
   return (
-    <div className="min-h-screen  flex flex-col px-5 py-6 justify-between bg-[#F0F4F9] ">
-      {/* Top Bar  */}
-      <div className="space-y-9">
-        <div className="px-3">
-          <Image src={menu_icon} alt="menu" height={50} width={22} />
-        </div>
-        <div className="flex items-center space-x-3  bg-gray-200 py-2 px-3 rounded-full  ">
-          <div className="w-6 h-6">
-            <Image
-              src={plus_icon}
-              alt="plusIcon"
-              height={27}
-              width={20}
-              className="w-full h-full object-cover"
-            />
+    <MotionDiv
+      variants={{
+        open: {
+          width: "50%",
+        },
+        close: {
+          width: "70px",
+        },
+      }}
+      animate={open ? "open" : "close"}
+      transition={{
+        type: "tween",
+        ease: "linear",
+      }}
+      className=" absolute left-0 top-0 z-50  h-screen bg-[#1E1F20] "
+    >
+      <div className="w-full h-full flex flex-col justify-between px-4    relative py-14 ">
+        {/* Top Bar  */}
+        <div className="">
+          <div className=" mt-4 bg-[#1A1A1C] rounded-full inline-block">
+            <IoIosAdd className="text-[#666667] w-10 h-10 " />
           </div>
-          <p className="whitespace-nowrap"> New Chat</p>
+          {open && (
+            <div className=" pt-3 space-y-3 overflow-hidden">
+              <h4 className="text-white font-semibold text-sm">Recent</h4>
+              {data.prevPrompt.map((prompt) => (
+                <div className=" flex space-x-3 items-center px-2  ">
+                  <div className="">
+                    <BiMessage className="w-7 h-7 text-white" />
+                  </div>
+                  <p className="text-white">{prompt}...</p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-        <div className="px-3">
-          <h5 className="font-semibold">Recent</h5>
-          <div className="flex space-x-1">
-            <motion.div className="w-6 h-6">
-              <Image
-                src={message_icon}
-                alt="message"
-                height={50}
-                width={22}
-                className="w-full h-full object-cover"
-              />
-            </motion.div>
-            <p className="whitespace-nowrap">Hello Gemini</p>
+
+        {/* Bottom bar  */}
+        <div>
+          <div className="space-y-3 overflow-hidden">
+            <div>
+              <BiHelpCircle className="text-white w-7 h-7" />
+            </div>
+            <div>
+              <BiHistory className="text-white w-7 h-7" />
+            </div>
+            <div>
+              <CiSettings className="text-white w-7 h-7" />
+            </div>
           </div>
         </div>
       </div>
-      {/* Bottom Bar  */}
-      <div className="px-3 space-y-4">
-        <div className="flex space-x-2">
-          <div className="w-6 h-6">
-            <Image
-              src={question_icon}
-              alt="menu"
-              height={50}
-              width={22}
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          <p>Help</p>
-        </div>
-        <div className="flex space-x-2">
-          <div className="w-6 h-6">
-            <Image
-              src={history_icon}
-              alt="menu"
-              height={50}
-              width={22}
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          <p>Activity</p>
-        </div>
-        <div className="flex space-x-2">
-          <div className="w-6 h-6">
-            <Image
-              src={setting_icon}
-              alt="menu"
-              height={50}
-              width={22}
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          <p>Settings</p>
-        </div>
-      </div>
-    </div>
+    </MotionDiv>
   );
 };
 
